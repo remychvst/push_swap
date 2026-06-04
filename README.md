@@ -6,22 +6,22 @@
 
 Push_swap is an algorithmic sorting project from the 42 curriculum.
 
-The objective is to sort a list of integers using two stacks (`a` and `b`) and a restricted set of stack operations while generating a valid sequence of instructions.
+The goal of the project is to sort a stack of integers using only the authorized Push_swap operations and two stacks (`a` and `b`).
 
-The project focuses on:
+This implementation provides four different sorting strategies:
 
-* Algorithms
-* Complexity analysis
-* Stack manipulation
-* Data structures
-* Sorting optimization
-* Performance evaluation
+* Simple (`O(n²)`)
+* Medium (`O(n√n)`)
+* Complex (`O(n log n)`)
+* Adaptive (strategy selected according to measured disorder)
 
-The program receives integers as arguments and outputs the operations required to sort stack `a` in ascending order.
+The project focuses on algorithmic complexity, optimization, data structures, stack manipulation, and performance analysis.
 
 ---
 
-## Compilation
+## Instructions
+
+### Compilation
 
 ```bash
 make
@@ -36,17 +36,15 @@ make fclean
 make re
 ```
 
----
+### Usage
 
-## Usage
-
-### Default adaptive mode
+Default adaptive mode:
 
 ```bash
 ./push_swap 4 67 3 87 23
 ```
 
-### Force a strategy
+Force a strategy:
 
 ```bash
 ./push_swap --simple 5 4 3 2 1
@@ -55,13 +53,15 @@ make re
 ./push_swap --adaptive 5 4 3 2 1
 ```
 
-### Benchmark mode
+Benchmark mode:
 
 ```bash
 ./push_swap --bench --adaptive 4 67 3 87 23
 ```
 
-Benchmark information is printed on stderr.
+The operation stream is printed to stdout.
+
+Benchmark information is printed to stderr.
 
 ---
 
@@ -69,109 +69,129 @@ Benchmark information is printed on stderr.
 
 ### Swap
 
-| Instruction | Description                            |
-| ----------- | -------------------------------------- |
-| sa          | Swap the first two elements of stack a |
-| sb          | Swap the first two elements of stack b |
-| ss          | Execute sa and sb simultaneously       |
+| Operation | Description                            |
+| --------- | -------------------------------------- |
+| sa        | Swap the first two elements of stack a |
+| sb        | Swap the first two elements of stack b |
+| ss        | Execute sa and sb simultaneously       |
 
 ### Push
 
-| Instruction | Description                                  |
-| ----------- | -------------------------------------------- |
-| pa          | Push the top element from stack b to stack a |
-| pb          | Push the top element from stack a to stack b |
+| Operation | Description                                |
+| --------- | ------------------------------------------ |
+| pa        | Push the top element of stack b to stack a |
+| pb        | Push the top element of stack a to stack b |
 
 ### Rotate
 
-| Instruction | Description                      |
-| ----------- | -------------------------------- |
-| ra          | Rotate stack a upward            |
-| rb          | Rotate stack b upward            |
-| rr          | Execute ra and rb simultaneously |
+| Operation | Description                      |
+| --------- | -------------------------------- |
+| ra        | Rotate stack a upward            |
+| rb        | Rotate stack b upward            |
+| rr        | Execute ra and rb simultaneously |
 
 ### Reverse Rotate
 
-| Instruction | Description                        |
-| ----------- | ---------------------------------- |
-| rra         | Reverse rotate stack a             |
-| rrb         | Reverse rotate stack b             |
-| rrr         | Execute rra and rrb simultaneously |
+| Operation | Description                        |
+| --------- | ---------------------------------- |
+| rra       | Reverse rotate stack a             |
+| rrb       | Reverse rotate stack b             |
+| rrr       | Execute rra and rrb simultaneously |
 
 ---
 
 ## Implemented Strategies
 
-### Small Sort
-
-Dedicated sorting routines are used for:
-
-* 2 numbers
-* 3 numbers
-* 5 numbers
-
----
-
 ### Simple Strategy — O(n²)
 
-The simple strategy repeatedly moves the smallest indexed element to stack `b` and rebuilds stack `a`.
+The simple strategy is based on repeated minimum extraction.
+
+The smallest indexed element is repeatedly moved to stack `b`, then all elements are pushed back to stack `a`.
+
+**Justification:** This strategy provides a simple and reliable baseline. It is straightforward to implement and verify, making it a good reference point. Its O(n²) complexity in Push_swap operations comes from the fact that locating and moving each minimum requires up to O(n) rotations, repeated n times.
 
 ---
 
 ### Medium Strategy — O(n√n)
 
-The medium strategy provides an intermediate sorting mode.
+The medium strategy uses a chunk-based sorting approach.
+
+The stack is divided into approximately √n ranges. Elements belonging to the current range are pushed to stack `b`, then pushed back to stack `a` in descending index order.
+
+**Justification:** Dividing the input into √n chunks means each pass over stack `a` costs O(n) rotations, and there are √n passes, yielding O(n√n) total operations. This is a significant improvement over O(n²) for moderately disordered inputs and remains simple enough to implement correctly.
 
 ---
 
 ### Complex Strategy — O(n log n)
 
-The complex strategy uses Binary Radix Sort.
+The complex strategy uses Binary Radix Sort on normalized indexes.
 
 Steps:
 
-1. Normalize values by assigning indexes
-2. Process indexes bit by bit
-3. Move elements between stacks according to the current bit
-4. Rebuild stack `a`
+1. Assign an index to each value according to its sorted position.
+2. Process indexes bit by bit.
+3. Move elements between stacks according to the current bit.
+4. Rebuild stack `a`.
+
+**Justification:** Radix sort on normalized indexes processes each of the log₂(n) bits with a single pass of O(n) Push_swap operations, giving O(n log n) total. This is optimal for comparison-based models and provides the best worst-case behavior for large, highly disordered inputs.
 
 ---
 
 ### Adaptive Strategy
 
-Adaptive mode automatically selects the sorting strategy according to the initial disorder of the stack.
+The adaptive strategy first computes the disorder of the stack.
 
-Disorder values:
+Disorder is defined as the ratio of inverted pairs to the maximum possible number of inversions.
 
-| Disorder        | Interpretation       |
-| --------------- | -------------------- |
-| 0.00            | Already sorted       |
-| 1.00            | Completely reversed  |
-| Between 0 and 1 | Partially disordered |
+Values range from:
 
-Adaptive mode is used when no strategy flag is provided.
+* `0.00` → already sorted
+* `1.00` → completely reversed
+
+The adaptive strategy selects the internal method according to the measured disorder:
+
+| Disorder               | Strategy                      |
+| ---------------------- | ----------------------------- |
+| disorder < 0.20        | Low strategy — O(n)           |
+| 0.20 ≤ disorder < 0.50 | Medium strategy — O(n√n)      |
+| disorder ≥ 0.50        | Complex strategy — O(n log n) |
+
+**Rationale for thresholds:**
+
+The thresholds were chosen to distinguish three structurally different input types:
+
+* **disorder < 0.20** — Nearly sorted inputs: only a few elements are out of place. A linear scan with targeted swaps and rotations is sufficient and optimal. Applying a heavier algorithm here would waste operations.
+* **0.20 ≤ disorder < 0.50** — Moderately disordered inputs: the stack has meaningful disorder but still retains partial structure. Chunk-based sorting exploits this structure efficiently at O(n√n).
+* **disorder ≥ 0.50** — Highly disordered inputs: the stack is close to random or reversed. No structural shortcut is available; the full O(n log n) Radix strategy is required to meet performance targets.
+
+This allows the program to adapt its behavior to the actual structure of the input rather than only its size.
 
 ---
 
 ## Benchmark Mode
 
-The option:
+The optional benchmark mode displays:
 
-```bash
---bench
-```
-
-displays:
-
-* Initial disorder
+* Computed disorder (%)
 * Selected strategy
-* Theoretical complexity
-* Total number of operations
+* Complexity class
+* Total operation count
+* Count of each Push_swap instruction
 
 Example:
 
 ```bash
 ./push_swap --bench --adaptive 4 67 3 87 23
+```
+
+Example output:
+
+```text
+[bench] disorder: 40.00%
+[bench] strategy: Adaptive / O(n sqrt n)
+[bench] total_ops: 13
+[bench] sa: 0 sb: 0 ss: 0 pa: 5 pb: 5
+[bench] ra: 2 rb: 1 rr: 0 rra: 0 rrb: 0 rrr: 0
 ```
 
 ---
@@ -180,15 +200,15 @@ Example:
 
 The program prints:
 
-```txt
+```text
 Error
 ```
 
-when:
+to stderr when:
 
 * Invalid arguments are provided
-* Integers exceed the valid range
-* Duplicate values are detected
+* Values are outside the integer range
+* Duplicate numbers are detected
 * Parsing fails
 * Unknown options are used
 
@@ -196,22 +216,9 @@ If no argument is provided, the program exits silently.
 
 ---
 
-## Performance
-
-Typical operation counts:
-
-| Numbers | Operations |
-| ------- | ---------- |
-| 3       | ≤ 3        |
-| 5       | ≤ 12       |
-| 100     | ~700–1100  |
-| 500     | ~5500–7000 |
-
----
-
 ## Project Structure
 
-```txt
+```text
 .
 ├── Makefile
 ├── push_swap.h
@@ -228,6 +235,7 @@ Typical operation counts:
 ├── ra_rb_rr.c
 ├── rra_rrb_rrr.c
 ├── small_sort.c
+├── low_sort.c
 ├── simple_sort.c
 ├── medium_sort.c
 ├── radix_sort.c
@@ -239,34 +247,73 @@ Typical operation counts:
 
 ---
 
-## Learning Outcomes
+## Performance
 
-Through this project we developed skills in:
+Typical results:
 
-* Stack manipulation
-* Sorting algorithms
-* Algorithmic optimization
-* Complexity analysis
+| Input Size | Operations |
+| ---------- | ---------- |
+| 3          | ≤ 3        |
+| 5          | ≤ 16       |
+| 100        | ~700–1200  |
+| 500        | ~7000–8500 |
+
+Actual results depend on disorder and selected strategy.
+
+---
+
+## Contributions
+
+### rchavast
+
+* Stack operations integration
+* Sorting strategy architecture
+* Adaptive selection logic
+* Benchmark integration
+* Project documentation
+
+### yaaguerd
+
+* Parsing
+* Stack initialization
 * Memory management
-* Modular programming
-* Performance-oriented development
-* Debugging and testing
+* Radix sort implementation
+* Utilities
+* Project structure and testing
+
+Both contributors understand and can explain the complete implementation during evaluation.
 
 ---
 
 ## Resources
 
-* 42 Push_swap subject
-* Linux man pages
-* Big-O complexity documentation
-* Radix Sort documentation
+### References
+
+* Knuth, D. E. — *The Art of Computer Programming, Vol. 3: Sorting and Searching* — foundational reference on sorting algorithms and complexity
+* [Big-O Cheat Sheet](https://www.bigocheatsheet.com/) — quick reference for algorithm complexity classes
+* [Radix Sort — Wikipedia](https://en.wikipedia.org/wiki/Radix_sort) — theoretical basis for the LSD Radix sort strategy used in the complex algorithm
+* [Inversion (discrete mathematics) — Wikipedia](https://en.wikipedia.org/wiki/Inversion_(discrete_mathematics)) — theoretical basis for the disorder metric
+* [42 Push_swap resources — harm-smits/push_swap_tester](https://github.com/harm-smits/42docs/blob/master/projects/push_swap.md) — community documentation and testing tools
+
+### AI Usage
+
+Artificial Intelligence tools were used as development assistants for:
+
+* Reviewing project structure
+* Verifying compliance with the subject
+* Discussing algorithmic approaches
+* Generating documentation drafts
+
+All code was reviewed, tested, modified, and validated by the project authors.
 
 ---
 
 ## Compilation Flags
 
 ```bash
--Wall -Wextra -Werror
+-Wall
+-Wextra
+-Werror
 ```
 
 The project follows the 42 School Norm.
