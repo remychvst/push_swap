@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   bench.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: rchavast <rchavast@student.42.fr>          #+#  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026-06-04 22:58:52 by rchavast          #+#    #+#             */
+/*   Updated: 2026-06-04 22:58:52 by rchavast         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "push_swap.h"
 
 static void	putnbr_fd(int n, int fd)
@@ -52,7 +64,7 @@ void	count_op(t_bench *bench, char *op)
 		bench->rrr++;
 }
 
-void	print_bench(t_bench *bench)
+static void	print_first_line(t_bench *bench)
 {
 	ft_putstr_fd("[bench] disorder: ", 2);
 	print_percent(bench->disorder);
@@ -62,5 +74,33 @@ void	print_bench(t_bench *bench)
 	ft_putstr_fd(bench->complexity, 2);
 	ft_putstr_fd("\n[bench] total_ops: ", 2);
 	putnbr_fd(bench->total, 2);
+	ft_putstr_fd("\n", 2);
+}
+
+void	print_bench(t_bench *bench)
+{
+	print_first_line(bench);
+	ft_putstr_fd("[bench] sa: ", 2);
+	putnbr_fd(bench->sa, 2);
+	ft_putstr_fd(" sb: ", 2);
+	putnbr_fd(bench->sb, 2);
+	ft_putstr_fd(" ss: ", 2);
+	putnbr_fd(bench->ss, 2);
+	ft_putstr_fd(" pa: ", 2);
+	putnbr_fd(bench->pa, 2);
+	ft_putstr_fd(" pb: ", 2);
+	putnbr_fd(bench->pb, 2);
+	ft_putstr_fd("\n[bench] ra: ", 2);
+	putnbr_fd(bench->ra, 2);
+	ft_putstr_fd(" rb: ", 2);
+	putnbr_fd(bench->rb, 2);
+	ft_putstr_fd(" rr: ", 2);
+	putnbr_fd(bench->rr, 2);
+	ft_putstr_fd(" rra: ", 2);
+	putnbr_fd(bench->rra, 2);
+	ft_putstr_fd(" rrb: ", 2);
+	putnbr_fd(bench->rrb, 2);
+	ft_putstr_fd(" rrr: ", 2);
+	putnbr_fd(bench->rrr, 2);
 	ft_putstr_fd("\n", 2);
 }
