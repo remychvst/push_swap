@@ -24,10 +24,7 @@ SRC = main.c \
 	split.c \
 	option.c \
 	disorder.c \
-	bench.c \
-	ft_putchar_fd.c \
-	ft_putstr_fd.c \
-	ft_strlen.c
+	bench.c
 
 OBJ = $(SRC:.c=.o)
 
@@ -38,6 +35,7 @@ $(NAME): $(OBJ)
 
 clean:
 	rm -f $(OBJ)
+	rm -f ft_putchar_fd.o ft_putstr_fd.o ft_strlen.o
 
 fclean: clean
 	rm -f $(NAME)

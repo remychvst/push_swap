@@ -12,7 +12,7 @@
 
 #include "push_swap.h"
 
-static int	get_sqrt(int n)
+int	get_sqrt(int n)
 {
 	int	i;
 
@@ -22,7 +22,7 @@ static int	get_sqrt(int n)
 	return (i);
 }
 
-static int	has_index_in_range(t_stack *a, int min, int max)
+int	has_index_in_range(t_stack *a, int min, int max)
 {
 	while (a)
 	{
@@ -33,7 +33,7 @@ static int	has_index_in_range(t_stack *a, int min, int max)
 	return (0);
 }
 
-static int	get_pos_in_range(t_stack *a, int min, int max)
+int	get_pos_in_range(t_stack *a, int min, int max)
 {
 	int	pos;
 
@@ -48,7 +48,7 @@ static int	get_pos_in_range(t_stack *a, int min, int max)
 	return (-1);
 }
 
-static int	get_max_index_pos(t_stack *stack)
+int	get_max_index_pos(t_stack *stack)
 {
 	int	pos;
 	int	best_pos;

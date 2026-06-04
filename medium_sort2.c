@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   meduim_sort2.c                                     :+:      :+:    :+:   */
+/*   medium_sort2.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: rchavast <rchavast@student.42.fr>          #+#  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026-06-04 23:36:39 by rchavast          #+#    #+#             */
-/*   Updated: 2026-06-04 23:36:39 by rchavast         ###   ########.fr       */
+/*   Created: 2026-06-04 23:51:39 by rchavast          #+#    #+#             */
+/*   Updated: 2026-06-04 23:51:39 by rchavast         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,11 +18,13 @@ static void	push_range_to_b(t_stack **a, t_stack **b, int min,
 	int	pos;
 	int	max;
 	int	chunk;
+	int	size;
 
-	chunk = get_sqrt(stack_size(*a) + stack_size(*b));
+	size = stack_size(*a) + stack_size(*b);
+	chunk = get_sqrt(size);
 	max = min + chunk - 1;
-	if (max >= stack_size(*a) + stack_size(*b))
-		max = stack_size(*a) + stack_size(*b) - 1;
+	if (max >= size)
+		max = size - 1;
 	while (has_index_in_range(*a, min, max))
 	{
 		pos = get_pos_in_range(*a, min, max);
