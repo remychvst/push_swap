@@ -100,9 +100,10 @@ void	rrr(t_stack **a, t_stack **b, t_bench *bench);
 
 void	sort_three(t_stack **a, t_bench *bench);
 void	sort_five(t_stack **a, t_stack **b, t_bench *bench);
-void	radix_sort(t_stack **a, t_stack **b, t_bench *bench);
+void	low_sort(t_stack **a, t_bench *bench);
 void	simple_sort(t_stack **a, t_stack **b, t_bench *bench);
 void	medium_sort(t_stack **a, t_stack **b, t_bench *bench);
+void	radix_sort(t_stack **a, t_stack **b, t_bench *bench);
 void	sort_stack(t_stack **a, t_stack **b, t_options opt, t_bench *bench);
 
 #endif

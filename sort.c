@@ -23,7 +23,7 @@ static void	adaptive_sort(t_stack **a, t_stack **b, t_bench *bench)
 	if (bench->disorder < 0.2)
 	{
 		set_strategy_info(bench, "Adaptive", "O(n)");
-		simple_sort(a, b, bench);
+		low_sort(a, bench);
 	}
 	else if (bench->disorder < 0.5)
 	{

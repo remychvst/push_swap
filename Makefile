@@ -13,6 +13,9 @@ SRC = main.c \
 	ra_rb_rr.c \
 	rra_rrb_rrr.c \
 	small_sort.c \
+	low_sort.c \
+	simple_sort.c \
+	medium_sort.c \
 	radix_sort.c \
 	sort.c \
 	utils.c \
@@ -20,9 +23,7 @@ SRC = main.c \
 	split.c \
 	option.c \
 	disorder.c \
-	bench.c \
-	simple_sort.c \
-	medium_sort.c
+	bench.c
 
 OBJ = $(SRC:.c=.o)
 
