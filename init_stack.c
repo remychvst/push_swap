@@ -50,11 +50,14 @@ int	parse_args(t_stack **a, int ac, char **av)
 	i = 1;
 	while (i < ac)
 	{
-		tab = ps_split(av[i]);
-		if (!tab)
-			error_exit(a);
-		parse_tab(a, tab);
-		free_split(tab);
+		if (!is_option(av[i]))
+		{
+			tab = ps_split(av[i]);
+			if (!tab)
+				error_exit(a);
+			parse_tab(a, tab);
+			free_split(tab);
+		}
 		i++;
 	}
 	return (1);

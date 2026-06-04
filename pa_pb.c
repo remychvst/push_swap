@@ -24,14 +24,16 @@ static void	push(t_stack **dst, t_stack **src)
 	*dst = tmp;
 }
 
-void	pa(t_stack **a, t_stack **b)
+void	pa(t_stack **a, t_stack **b, t_bench *bench)
 {
 	push(a, b);
+	count_op(bench, "pa");
 	ft_putstr_fd("pa\n", 1);
 }
 
-void	pb(t_stack **a, t_stack **b)
+void	pb(t_stack **a, t_stack **b, t_bench *bench)
 {
 	push(b, a);
+	count_op(bench, "pb");
 	ft_putstr_fd("pb\n", 1);
 }

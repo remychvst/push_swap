@@ -29,7 +29,12 @@ SRC = main.c \
 	sort.c \
 	utils.c \
 	free.c \
-	split.c 
+	split.c \
+	option.c \
+	disorder.c \
+	bench.c \
+	simple_sort.c \
+	medium_sort.c
 
 OBJ = $(SRC:.c=.o)
 

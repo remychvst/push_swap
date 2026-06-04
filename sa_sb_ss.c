@@ -26,21 +26,24 @@ static void	swap(t_stack **stack)
 	*stack = second;
 }
 
-void	sa(t_stack **a)
+void	sa(t_stack **a, t_bench *bench)
 {
 	swap(a);
+	count_op(bench, "sa");
 	ft_putstr_fd("sa\n", 1);
 }
 
-void	sb(t_stack **b)
+void	sb(t_stack **b, t_bench *bench)
 {
 	swap(b);
+	count_op(bench, "sb");
 	ft_putstr_fd("sb\n", 1);
 }
 
-void	ss(t_stack **a, t_stack **b)
+void	ss(t_stack **a, t_stack **b, t_bench *bench)
 {
 	swap(a);
 	swap(b);
+	count_op(bench, "ss");
 	ft_putstr_fd("ss\n", 1);
 }

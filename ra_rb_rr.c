@@ -26,21 +26,24 @@ static void	rotate(t_stack **stack)
 	last->next = first;
 }
 
-void	ra(t_stack **a)
+void	ra(t_stack **a, t_bench *bench)
 {
 	rotate(a);
+	count_op(bench, "ra");
 	ft_putstr_fd("ra\n", 1);
 }
 
-void	rb(t_stack **b)
+void	rb(t_stack **b, t_bench *bench)
 {
 	rotate(b);
+	count_op(bench, "rb");
 	ft_putstr_fd("rb\n", 1);
 }
 
-void	rr(t_stack **a, t_stack **b)
+void	rr(t_stack **a, t_stack **b, t_bench *bench)
 {
 	rotate(a);
 	rotate(b);
+	count_op(bench, "rr");
 	ft_putstr_fd("rr\n", 1);
 }
