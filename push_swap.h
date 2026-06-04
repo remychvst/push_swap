@@ -98,6 +98,12 @@ void	rra(t_stack **a, t_bench *bench);
 void	rrb(t_stack **b, t_bench *bench);
 void	rrr(t_stack **a, t_stack **b, t_bench *bench);
 
+int		get_sqrt(int n);
+int		has_index_in_range(t_stack *a, int min, int max);
+int		get_pos_in_range(t_stack *a, int min, int max);
+int		get_max_index_pos(t_stack *stack);
+void	rotate_to_pos(t_stack **stack, int pos, t_bench *bench, int is_b);
+
 void	sort_three(t_stack **a, t_bench *bench);
 void	sort_five(t_stack **a, t_stack **b, t_bench *bench);
 void	low_sort(t_stack **a, t_bench *bench);

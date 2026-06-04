@@ -12,12 +12,13 @@
 
 #include "push_swap.h"
 
-static void	sort_bit(t_stack **a, t_stack **b, int bit, int size,
-		t_bench *bench)
+static void	sort_bit(t_stack **a, t_stack **b, int bit, t_bench *bench)
 {
 	int	i;
+	int	size;
 
 	i = 0;
+	size = stack_size(*a);
 	while (i < size)
 	{
 		if ((((*a)->index >> bit) & 1) == 1)
@@ -33,15 +34,13 @@ static void	sort_bit(t_stack **a, t_stack **b, int bit, int size,
 void	radix_sort(t_stack **a, t_stack **b, t_bench *bench)
 {
 	int	bit;
-	int	size;
 	int	max_bits;
 
 	bit = 0;
-	size = stack_size(*a);
 	max_bits = get_max_bits(*a);
 	while (bit < max_bits)
 	{
-		sort_bit(a, b, bit, size, bench);
+		sort_bit(a, b, bit, bench);
 		bit++;
 	}
 }

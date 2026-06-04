@@ -37,7 +37,8 @@ static void	adaptive_sort(t_stack **a, t_stack **b, t_bench *bench)
 	}
 }
 
-void	sort_stack(t_stack **a, t_stack **b, t_options opt, t_bench *bench)
+static void	forced_sort(t_stack **a, t_stack **b, t_options opt,
+	t_bench *bench)
 {
 	if (opt.strategy == STRAT_SIMPLE)
 	{
@@ -54,6 +55,12 @@ void	sort_stack(t_stack **a, t_stack **b, t_options opt, t_bench *bench)
 		set_strategy_info(bench, "Complex", "O(n log n)");
 		radix_sort(a, b, bench);
 	}
+}
+
+void	sort_stack(t_stack **a, t_stack **b, t_options opt, t_bench *bench)
+{
+	if (opt.strategy != STRAT_ADAPTIVE)
+		forced_sort(a, b, opt, bench);
 	else if (stack_size(*a) == 2)
 	{
 		set_strategy_info(bench, "Adaptive", "O(1)");

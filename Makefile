@@ -16,6 +16,7 @@ SRC = main.c \
 	low_sort.c \
 	simple_sort.c \
 	medium_sort.c \
+	medium_sort2.c \
 	radix_sort.c \
 	sort.c \
 	utils.c \
@@ -23,7 +24,10 @@ SRC = main.c \
 	split.c \
 	option.c \
 	disorder.c \
-	bench.c
+	bench.c \
+	ft_putchar_fd.c \
+	ft_putstr_fd.c \
+	ft_strlen.c
 
 OBJ = $(SRC:.c=.o)
 

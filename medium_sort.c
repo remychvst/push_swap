@@ -70,70 +70,29 @@ static int	get_max_index_pos(t_stack *stack)
 	return (best_pos);
 }
 
-static void	push_range_to_b(t_stack **a, t_stack **b, int min, int max,
-		t_bench *bench)
-{
-	int	pos;
-	int	size;
-
-	while (has_index_in_range(*a, min, max))
-	{
-		pos = get_pos_in_range(*a, min, max);
-		size = stack_size(*a);
-		if (pos <= size / 2)
-		{
-			while (pos-- > 0)
-				ra(a, bench);
-		}
-		else
-		{
-			while (pos++ < size)
-				rra(a, bench);
-		}
-		pb(a, b, bench);
-	}
-}
-
-static void	push_back_max(t_stack **a, t_stack **b, t_bench *bench)
-{
-	int	pos;
-	int	size;
-
-	while (*b)
-	{
-		pos = get_max_index_pos(*b);
-		size = stack_size(*b);
-		if (pos <= size / 2)
-		{
-			while (pos-- > 0)
-				rb(b, bench);
-		}
-		else
-		{
-			while (pos++ < size)
-				rrb(b, bench);
-		}
-		pa(a, b, bench);
-	}
-}
-
-void	medium_sort(t_stack **a, t_stack **b, t_bench *bench)
+void	rotate_to_pos(t_stack **stack, int pos, t_bench *bench, int is_b)
 {
 	int	size;
-	int	chunk;
-	int	min;
-	int	max;
 
-	size = stack_size(*a);
-	chunk = get_sqrt(size);
-	min = 0;
-	while (min < size)
+	size = stack_size(*stack);
+	if (pos <= size / 2)
 	{
-		max = min + chunk - 1;
-		if (max >= size)
-			max = size - 1;
-		push_range_to_b(a, b, min, max, bench);
-		min += chunk;
+		while (pos-- > 0)
+		{
+			if (is_b)
+				rb(stack, bench);
+			else
+				ra(stack, bench);
+		}
 	}
-	push_back_max(a, b, bench);
+	else
+	{
+		while (pos++ < size)
+		{
+			if (is_b)
+				rrb(stack, bench);
+			else
+				rra(stack, bench);
+		}
+	}
 }
