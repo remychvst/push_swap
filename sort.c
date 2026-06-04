@@ -64,11 +64,6 @@ void	sort_stack(t_stack **a, t_stack **b, t_options opt, t_bench *bench)
 		set_strategy_info(bench, "Adaptive", "O(1)");
 		sort_three(a, bench);
 	}
-	else if (stack_size(*a) <= 5)
-	{
-		set_strategy_info(bench, "Adaptive", "O(1)");
-		sort_five(a, b, bench);
-	}
 	else
 		adaptive_sort(a, b, bench);
 }
